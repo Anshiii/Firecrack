@@ -136,9 +136,10 @@
         }
 
     </style>
+    <script src="jquery-2.1.4.min.js"></script>
 </head>
 <body>
-<div class="fireWrap">
+<div id="1" class="fireWrap"><!--this-->
     <div class="f-fire">
         <div class="f-head"></div>
         <div class="f-body">
@@ -159,85 +160,109 @@
 </div>
 <script>
     /*要new的是一个firewrap.(ID可选。旗下的不可选。)*/
+    var fire1 = new FireFactory(233);//疑问，如此成的html是否能被css渲染？
     console.log(document.querySelector(".fireWrap").__proto__)
-    function FireFactory(id) {
-        document.getElementById(id).innerHTML;
+    console.log(document.getElementsByClassName(".fireWrap").__proto__)
+    function Fire(id) {//自定义起点（鼠标点击位置or另设置）比较有趣
+        var father = $('#' + id);
+        father.append(['<div class="f-fire">',
+            '<div class="f-head"></div>',
+            '<div class="f-body">',
+            '<div class="f-pattern">',
+            '<i class="f-line"></i>',
+            '<i class="f-line"></i>',
+            '<i class="f-line"></i>',
+            '<i class="f-line"></i>',
+            '<i class="f-line"></i>',
+            '<i class="f-line"></i>',
+            '<i class="f-line"></i>',
+            '<i class="f-line"></i>',
+            '</div>',
+            '</div>',
+            '<div class="f-tail"></div>',
+            '</div>',
+            '<div class="f-bomBox"></div>"']);
 
-        document.createElement("div").classList.add(id);
+        /*document.createElement("div").classList.add(id);
+         document.createElement("div").classList.add("f-fire");
+         document.createElement("div").classList.add("f-head");
+         document.createElement("div").classList.add("f-body");
+         document.createElement("div").classList.add("f-pattern");
+         document.createElement("div").classList.add("f-line");
+         document.createElement("div").classList.add("f-tail");*/
+        father.children(".XXX")
 
-        document.createElement("div").classList.add("f-fire");
-        document.createElement("div").classList.add("f-head");
-        document.createElement("div").classList.add("f-body");
-        document.createElement("div").classList.add("f-pattern");
-        document.createElement("div").classList.add("f-line");
-        document.createElement("div").classList.add("f-tail");
-        var flyMonkey = document.getElementsByClassName("f-fire")[0];//att id下的f-fire.
-        document.querySelector('#' + id + " .f-fire")
 
-        document.createElement("div").classList.add("f-bomBox");
-        document.createElement("div").classList.add("f-bom");
         document.createElement("div").classList.add("f-bomLine");
 
         var fireLine = document.getElementsByClassName("f-bomBox")[0];
 
     }
-    var distance2 = 100;
-    var num = 12;//单个烟花线数
-    var numBom = 10;//爆炸个数
-    var angle = 360 / num;
-    var distance = 5;//烟花线距离烟花中点距离
-    var interval = 80; //烟花绽放范围（以冲天炮最终点为基准。）
-    var fireArr = [];
-    var fireArrArr = [];
-    var firegle = document.createElement("div");
-    var fBom = document.createElement("div");
-    var fBomArr = [];
-    var fBomBox = document.getElementById("f-bomBox");
-    firegle.classList.add("f-bomLine");
-    fBom.classList.add("f-bom");
 
-    for (var i = 0; i < numBom; i++) {
-        fBomArr.push(fBom.cloneNode(true));
-        fBomBox.appendChild(fBomArr[i]);
-        fireArr[i] = [];
-        oneBom(i, distance);
-    }
-    function oneBom(n, distance) {
-        for (var i = 0; i < num; i++) {
-            fireArr[n][i] = firegle.cloneNode(true);
-            fireArr[n][i].style.transform = "rotate(" + angle * i + "deg) translate3d(" + distance + "px,0,0) rotate(90deg)";
-            fBomArr[n].appendChild(fireArr[n][i]);
+    Fire.prototype.bom = function (that) {
+        var distance2 = 100;
+        var num = 12;//单个烟花线数
+        var numBom = 10;//爆炸个数
+        var angle = 360 / num;
+        var distance = 5;//烟花线距离烟花中点距离
+        var interval = 80; //烟花绽放范围（以冲天炮最终点为基准。）
+        var fireArr = [];
+
+
+        var firegle = document.createElement("div");
+        var fBom = document.createElement("div");
+        var fBomArr = [];
+//        var fBomBox = document.getElementById("f-bomBox");
+        var fBomBox = that.children(".f-bomBox")
+        firegle.classList.add("f-bomLine");
+        fBom.classList.add("f-bom");
+
+        for (var i = 0; i < numBom; i++) {
+            fBomArr.push(fBom.cloneNode(true));
+            fBomBox.appendChild(fBomArr[i]);
+            fireArr[i] = [];
+            oneBom(i, distance);
         }
-    }
-
-    var fFire = document.getElementsByClassName("f-fire")[0];
-    fFire.onclick = function () {
-        this.classList.add("f-fly");
-        console.log(this.classList);
-        this.addEventListener("animationend", function () {
-            console.log(fFire.getBoundingClientRect());
-            var fireTop = fFire.getBoundingClientRect().top;
-            var fireLeft = fFire.getBoundingClientRect().left;
-            for (var n = 0; n < numBom; n++) {
-                console.log(document.getElementsByClassName("f-bom")[n].__proto__);
-                console.log(document.getElementsByClassName("f-bom")[n].children);
-                var delay = random(0, n) + "s";
-                var color = '#' + (Math.random() * 0xffffff << 0).toString(16);
-                document.getElementsByClassName("f-bom")[n].style.top = random(fireTop + interval, fireTop - interval) + "px";
-                document.getElementsByClassName("f-bom")[n].style.left = random(fireLeft + interval, fireLeft - interval) + "px";
-                for (var i = 0; i < num; i++) {
-                    fireArr[n][i].style.transform = "rotate(" + angle * i + "deg) translate3d(" + distance2 + "px,0,0) rotate(90deg)";
-                    fireArr[n][i].style.transitionDelay = delay;
-                    fireArr[n][i].style.backgroundColor = color;
-                }
+        function oneBom(n, distance) {
+            for (var i = 0; i < num; i++) {
+                fireArr[n][i] = firegle.cloneNode(true);
+                fireArr[n][i].style.transform = "rotate(" + angle * i + "deg) translate3d(" + distance + "px,0,0) rotate(90deg)";
+                fBomArr[n].appendChild(fireArr[n][i]);
             }
-            fBomBox.classList.add("f-bomNow");
-        })
-    };
+        }
+
+        var fFire = document.getElementsByClassName("f-fire")[0];
+        fFire.onclick = function () {
+            this.classList.add("f-fly");
+            console.log(this.classList);
+            this.addEventListener("animationend", function () {
+                console.log(fFire.getBoundingClientRect());
+                var fireTop = fFire.getBoundingClientRect().top;
+                var fireLeft = fFire.getBoundingClientRect().left;
+                for (var n = 0; n < numBom; n++) {
+                    console.log(document.getElementsByClassName("f-bom")[n].__proto__);
+                    console.log(document.getElementsByClassName("f-bom")[n].children);
+                    var delay = random(0, n) + "s";
+                    var color = '#' + (Math.random() * 0xffffff << 0).toString(16);
+                    document.getElementsByClassName("f-bom")[n].style.top = random(fireTop + interval, fireTop - interval) + "px";
+                    document.getElementsByClassName("f-bom")[n].style.left = random(fireLeft + interval, fireLeft - interval) + "px";
+                    for (var i = 0; i < num; i++) {
+                        fireArr[n][i].style.transform = "rotate(" + angle * i + "deg) translate3d(" + distance2 + "px,0,0) rotate(90deg)";
+                        fireArr[n][i].style.transitionDelay = delay;
+                        fireArr[n][i].style.backgroundColor = color;
+                    }
+                }
+                fBomBox.classList.add("f-bomNow");
+            })
+        };
+    }
+    Fire.prototype.firestyle = function(){}
+
 
     function random(max, min) {
         return Math.random() * (max - min) + min;
     }
+
 
     function FireBom(firewrap, num, numBom, distance, distance2, interval) {
         var fireArr = [];
@@ -291,6 +316,9 @@
             return Math.random() * (max - min) + min;
         }
     }
+
+    //后期使用的话
+    var fc1 = new FireFactory;
 
 </script>
 </body>
