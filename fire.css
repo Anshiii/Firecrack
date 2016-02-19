@@ -1,0 +1,130 @@
+.f-fire {
+    position: fixed;
+    bottom: 5px;
+    left: 200px;
+    transform: scale(0.2);
+}
+
+.f-pattern, .f-line, .f-tail {
+
+}
+
+.f-head {
+    width: 0;
+    height: 0;
+    border-bottom: 50px solid #E06F71;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    border-radius: 5px;
+}
+
+.f-body {
+    background-color: #E06F71;
+    width: 80px;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    left: 30px;
+}
+
+.f-pattern {
+    transform: rotate(-30deg);
+    position: relative;
+    top: 20px;
+    left: -30px;
+}
+
+.f-line {
+    background-color: #114459;
+    width: 170px;
+    height: 15px;
+    margin-bottom: 17px;
+    display: block;
+}
+
+.f-tail {
+    background-color: #FECC5B;
+    width: 10px;
+    height: 150px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    position: relative;
+    left: 64px;
+}
+
+.f-tail::before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 19px;
+    height: 60px;
+    border-bottom-left-radius: 19px;
+    left: 20px;
+    border-left: 5px solid #F9AE37;
+    border-bottom: 5px solid #F9AE37;
+}
+
+.f-tail::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 19px;
+    height: 50px;
+    border-top-right-radius: 19px;
+    left: 44px;
+    border-top: 5px solid #F9AE37;
+    border-right: 5px solid #F9AE37;
+    top: 60px;
+}
+
+@keyframes f-fly {
+    from {
+        opacity: 1;
+    }
+    8% {
+        transform: scale(0.2);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0);
+        bottom: 700px;
+        /*box-shadow: 0 0 10px 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4;*/
+    }
+}
+
+.f-fly {
+    animation: f-fly 2s ease-in forwards;
+}
+
+@keyframes f-bom {
+
+    to {
+        opacity: 0;
+        transform: translate3d(30px, 0, 0);
+    }
+}
+
+/*ÑÌ»¨±¬Õ¨Ïß*/
+.f-bom {
+    position: fixed;
+    /*   bottom: 860px;
+       left: 270px;*/
+}
+
+.f-bomLine {
+    /*box-shadow: 0 0 10px 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4, 0 0 1px #AC85B4;*/
+    width: 3px;
+    height: 0;
+    border-radius: 10px;
+    background-color: #F9AE37;
+    position: absolute;
+    opacity: 1;
+
+    transition: 2s ease-out;
+    /*transform-origin: 0 0 ;*/
+}
+
+.f-bomNow .f-bomLine {
+    opacity: 0;
+    height: 30px;;
+}

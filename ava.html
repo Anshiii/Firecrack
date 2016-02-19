@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style>
+
+    .ava {
+        width: 300px;
+        height: 300px;
+        color: #fff;
+        border-radius: 5px;
+        margin: 50px auto;
+        font-size: 300px;
+        font-family: "Gotham Rounded A", "Gotham Rounded B", Helvetica, Arial, sans-serif;
+        text-align: center;
+        line-height: 300px;
+        background-color: #51D8EB;
+        overflow: hidden;
+
+    }
+</style>
+<body>
+<div id="demo1" class="ava">M</div>
+<script>
+    //1px 1px rgba(197, 223, 248,0.8),2px 2px rgba(197, 221, 248,0.8),3px 3px rgba(197, 223, 248,0.8)
+    var str;
+    var arr = [];
+    var num = 150;
+    for (var i = 0; i < num; i++) {
+        str = i + 'px ' + i + 'px rgb(42,191,213)';
+        arr.push(str)
+    }
+    console.log(arr.join(","));
+    var shadow = document.getElementById("demo1");
+    shadow.style.textShadow = arr.join(",");
+</script>
+
+</body>
+</html>
