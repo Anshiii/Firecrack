@@ -9,14 +9,6 @@
 <body>
 
 <div class="wrap">
-    <div class="fire">
-        <div class="f-look">
-            <div class="look-head"></div>
-            <div class="look-body"></div>
-            <div class="look-tail"></div>
-        </div>
-        <div class="f-line"></div>
-    </div>
 </div>
 <script>
     //todo  参数设置
@@ -29,29 +21,30 @@
         this.TargetX = 0;
         this.TargetY = 0;
         this.deg = 0;
-        this.BomLineArr = new Array(this.CONST.LINENUM);
+        this.BomLineArr = new Array(Fire.CONST.LINENUM);
         this.oneBomLine = {};
+        this.lookstyle = Fire.CONST.LOOKSTYLE[Math.floor(Math.random()*4)];
+        this.linestyle = '';
 
         this.jq = {
             fline: $(this.ele).find(".f-line")
         }
     }
     Fire.CONST = {
-        LOOKSTYLE: {},
+        LOOKSTYLE: ['rb','yr','pwr','gy'],
         LINESTYLE: {},
         LINENUM: 12,
         ANGEL: 30,
         STARTDIS: 5,
-        FINALDIS: 100,
+        FINALDIS: 100
     };
     Fire.prototype = {
-        createFireDom: function (lookstyle, linestyle) {
+        createFireDom: function () {
             this.ele.classList.add('fire');
             $(this.ele).append([
-                '<div class="f-look ' + lookstyle + '">',
+                '<div class="f-look lookStyle-' + this.lookstyle + '">',
                 '<div class="look-head"></div>',
-                '<div class="look-body">',
-                '<div class="bd-pattern">',
+                '<div class="look-body"><div class="bd-pattern">',
                 '<i class="p-line"></i>',
                 '<i class="p-line"></i>',
                 '<i class="p-line"></i>',
@@ -62,10 +55,8 @@
                 '<i class="p-line"></i>',
                 '</div></div>',
                 '<div class="look-tail"></div>',
-                '</div>',
-                '<div class="f-line ' + linestyle + '">',
-                '</div>'
-            ]);
+                '</div><div class="f-line ' + this.linestyle + '"></div>'
+            ].join(""));
             this.father.append(this.ele);
             this.X = this.ele.offsetLeft;
             this.Y = this.ele.offsetTop;
@@ -88,15 +79,15 @@
             this.oneBomLine.classList.add('line-item');
             this.BomLineArr.push(this.oneBomLine);
         },
-        bomLineTransform: function (index,distance) {
+        bomLineTransform: function (index, distance) {
             this.BomLineArr[index].style.transform = "rotate(" + this.CONST.ANGEL * index + "deg) translate3d(" + distance + "px,0,0) rotate(90deg)";
         },
-        init:function(){
+        init: function () {
             this.createFireDom();
         }
     };
 
-    var f1 = new Fire({father:$('.wrap')});
+    var f1 = new Fire({father: $('.wrap')});
     f1.init();
 </script>
 </body>
