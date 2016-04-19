@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="fire.April.css" rel="stylesheet">
+    <script src="jquery-2.1.4.min.js"></script>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="fire">
+        <div class="f-look">
+            <div class="look-head"></div>
+            <div class="look-body"></div>
+            <div class="look-tail"></div>
+        </div>
+        <div class="f-line"></div>
+    </div>
+</div>
+<script>
+    //todo  参数设置
+    /*参数为一个对象{father:jq,}*/
+    function Fire(argment) {
+        this.father = argment.father;
+        this.ele = document.createElement('div');
+        this.X = 0;
+        this.Y = 0;
+        this.TargetX = 0;
+        this.TargetY = 0;
+        this.deg = 0;
+        this.BomLineArr = new Array(this.CONST.LINENUM);
+        this.oneBomLine = {};
+
+        this.jq = {
+            fline: $(this.ele).find(".f-line")
+        }
+    }
+    Fire.CONST = {
+        LOOKSTYLE: {},
+        LINESTYLE: {},
+        LINENUM: 12,
+        ANGEL: 30,
+        STARTDIS: 5,
+        FINALDIS: 100,
+    };
+    Fire.prototype = {
+        createFireDom: function (lookstyle, linestyle) {
+            this.ele.classList.add('fire');
+            $(this.ele).append([
+                '<div class="f-look ' + lookstyle + '">',
+                '<div class="look-head"></div>',
+                '<div class="look-body">',
+                '<div class="bd-pattern">',
+                '<i class="p-line"></i>',
+                '<i class="p-line"></i>',
+                '<i class="p-line"></i>',
+                '<i class="p-line"></i>',
+                '<i class="p-line"></i>',
+                '<i class="p-line"></i>',
+                '<i class="p-line"></i>',
+                '<i class="p-line"></i>',
+                '</div></div>',
+                '<div class="look-tail"></div>',
+                '</div>',
+                '<div class="f-line ' + linestyle + '">',
+                '</div>'
+            ]);
+            this.father.append(this.ele);
+            this.X = this.ele.offsetLeft;
+            this.Y = this.ele.offsetTop;
+        },
+        fireRotate: function () {
+            this.ele.style.transform = 'rotate(' + this.deg + 'deg)';
+        },
+        fireMove: function () {
+            this.ele.style.left = this.X + 'px';
+            this.ele.style.top = this.Y + 'px';
+        },
+        finalCalculate: function (final) {
+            this.TargetX = final.pageX;
+            this.TargetY = final.pageY;
+            console.log(Math.atan((this.TargetX - this.X) / (this.TargetY - this.Y)));
+            this.deg = Math.atan((this.TargetX - this.X) / (this.TargetY - this.Y));
+        },
+        createOneBomLine: function () {
+            this.oneBomLine = document.createElement('i');
+            this.oneBomLine.classList.add('line-item');
+            this.BomLineArr.push(this.oneBomLine);
+        },
+        bomLineTransform: function (index,distance) {
+            this.BomLineArr[index].style.transform = "rotate(" + this.CONST.ANGEL * index + "deg) translate3d(" + distance + "px,0,0) rotate(90deg)";
+        },
+        init:function(){
+            this.createFireDom();
+        }
+    };
+
+    var f1 = new Fire({father:$('.wrap')});
+</script>
+</body>
+</html>
