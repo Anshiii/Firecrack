@@ -26,6 +26,7 @@
         this.lookstyle = Fire.CONST.LOOKSTYLE[Math.floor(Math.random() * Fire.CONST.LOOKSTYLE.length)];
         this.linestyle = '';
         this.width = 7 * Fire.CONST.SINGEL;
+        var _that = this;
 
         this.jq = {
             fline: $(this.ele).find(".f-line")
@@ -41,7 +42,7 @@
         SINGEL: 8
     };
     Fire.prototype = {
-        //创建fire节点与节点树
+        //创建fire节点与插入节点树
         createFireDom: function () {
             this.ele.classList.add('fire');
             $(this.ele).append([
@@ -70,20 +71,18 @@
             this.ele.style.transition = 'transform 0.5s linear ';
         },
         //fire移动
-        fireMove: function (callback) {
+        fireMove: function () {
             this.ele.style.left = this.X + 'px';
             this.ele.style.top = this.Y + 'px';
             this.ele.style.transform = 'rotate(' + this.deg + 'deg) scale(0.1)';
             this.ele.style.transition = '1.5s linear ';
-            callback();
         },
         //终点坐标和角度计算
-        finalCalculate: function (final, callback) {
-            this.TargetX = final.offsetLeft;
-            this.TargetY = final.offsetTop;
-            console.log(Math.atan((this.TargetX - this.X) / (this.TargetY - this.Y)));
-            this.deg = Math.atan((this.TargetX - this.X) / (this.TargetY - this.Y));
-            callback();
+        finalCalculate: function (final) {
+            this.TargetX = final.offsetX;
+            this.TargetY = final.offsetY;
+            this.deg = 90* Math.atan((this.TargetX - this.X) / (this.TargetY - this.Y));
+            console.log(this.deg)
         },
         //创建烟花线
         createBomLine: function () {
@@ -92,21 +91,22 @@
                 this.oneBomLine.classList.add('line-item');
                 this.BomLineArr.push(this.oneBomLine);
                 this.bomLineTransform(i, Fire.CONST.STARTDIS);
-                console.log(this.BomLineArr,'increatBomLine')
             }
         },
         //添加fire绑定事件
-        fireClickBind: function () {
-            var that = this;
+        fireClickBind: function (obj) {
+            var _this = this;
             this.father.one('click', function (e) {
-                that.finalCalculate(e, that.fireOpen);
+                _this.finalCalculate(e);
+                _this.fireRotate();
+                setTimeout(_this.fireMove, 800)
             });
         },
         //添加fire 变形绑定（飞行结束
         fireTransBind: function () {
-            var that = this;
+            var _this = this;
             $(this.ele).on("transitionEnd", function () {
-                that.bomLineOpen();
+                _this.bomLineOpen();
             })
         },
         bomLineOpen: function () {
@@ -114,31 +114,21 @@
             $(this.BomLineArr).show();//todo $(dom数组)可行？
             this.BomLineArr.forEach(function (element, index, arry) {
                 that.bomLineTransform(index, Fire.CONST.FINALDIS);
-                element.style.transition = '0.5s linera'
+                element.style.transition = '0.5s linera';
             })
 
         },
         //烟花线transform设置
         bomLineTransform: function (index, distance) {
-            console.log(this.BomLineArr);
-            console.log(this.BomLineArr[index]);
             this.BomLineArr[index].style.transform = "rotate(" + Fire.CONST.ANGEL * index + "deg) translate3d(" + distance + "px,0,0) rotate(90deg)";
-        },
-        fireOpen: function () {
-            var that = this;
-            this.fireRotate();
-            setTimeout((function (that) {
-                return function () {
-                    that.fireMove(that.fireTransBind);
-                }
-            })(this), 800);//todo this>that
-
         },
         //todo 初始化
         init: function () {
+            var _this = this;
             this.createFireDom();
             this.createBomLine();
             this.fireClickBind();
+            this.fireTransBind();
         }
     };
 
